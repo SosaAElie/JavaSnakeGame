@@ -2,12 +2,11 @@ import java.util.Scanner;
 
 class Main {
   public static void main(String[] args) {
-    Field myField = new Field(50,25,'.');
-		Character myCharacter = new Character(10,'X');
+    Field myField = new Field(40,20,'.');
+		Character myCharacter = new Character(8,'X');
 		myField.makeField();
 		myField.addCharacter(myCharacter, 0, 0);
 		myField.renderField();
-		// myField.getUserInput();
 		myField.moveCharacterAround();
 		
   }
@@ -63,82 +62,83 @@ class Field{
 		}
 	}
 
-	public void processUserInput(char direction){
+	public char processUserInput(char direction){
 		char capitalizedDirection;
 		int asciiDirection = (int)direction;
 		if(asciiDirection >= 97) capitalizedDirection = (char)(asciiDirection-32);
 		else capitalizedDirection = direction;
-		System.out.println(capitalizedDirection);
+		return capitalizedDirection;
 	}
 
 	public void moveCharacter(char direction){
-		if(direction == 'Q'){
-
+		if(direction == 'W'){
+			this.newCharacterPositionsUp(characterSymbolPositions);
+			
 		}
 	}
 
 	public void closeField(){
 		myScanner.close();
-		System.out.println("Game has ended.");
 	}
 
 	private int[] fieldBorder(){
+		
 		//An array containing the index values that symbol the border of the field
 		return new int[2];
 	}	
 
 
-	public void getUserInput(){
+	public char getUserInput(){
 		myScanner = new Scanner(System.in);
 		System.out.println("Select a direction: W (up), S (down), A (left), D (right): ");
 		char input = myScanner.nextLine().charAt(0);
-		this.processUserInput(input);
+		return this.processUserInput(input);
 	}
 
 	public void moveCharacterAround(){
 		//Make it so that the previous character symbol has to move into the position of the current character symbol, calculate the new character symbol position and move each symbol from its previous position into the new one
-		int[] corners = this.fieldCorners();
-		boolean right = false;
-		boolean left = false;
-		boolean up = false;
-		boolean down = false;
+		// int[] corners = this.fieldCorners();
+		// boolean right = false;
+		// boolean left = false;
+		// boolean up = false;
+		// boolean down = false;
 		while(true){
+			char direction = this.getUserInput();
 			int lastPosition = this.characterSymbolPositions[this.characterSymbolPositions.length-1];
-			int characterHead = this.characterSymbolPositions[0];
+			// int characterHead = this.characterSymbolPositions[0];
 			
-			if (characterHead == corners[0] || right){
+			// if (characterHead == corners[0] || right){
 				
-				right = true;
-				left = false;
-				up = false;
-				down = false;
-			};
-			if (characterHead == corners[1]){
-				right = false;
-				left = false;
-				up = false;
-				down = true;
-			};
-			if (characterHead == corners[2]){
-				right = false;
-				left = false;
-				up = true;
-				down = false;
-			}; 
-			if (characterHead == corners[3]){
-				right = false;
-				left = true;
-				up = false;
-				down = false;			
-			};
+			// 	right = true;
+			// 	left = false;
+			// 	up = false;
+			// 	down = false;
+			// };
+			// if (characterHead == corners[1]){
+			// 	right = false;
+			// 	left = false;
+			// 	up = false;
+			// 	down = true;
+			// };
+			// if (characterHead == corners[2]){
+			// 	right = false;
+			// 	left = false;
+			// 	up = true;
+			// 	down = false;
+			// }; 
+			// if (characterHead == corners[3]){
+			// 	right = false;
+			// 	left = true;
+			// 	up = false;
+			// 	down = false;			
+			// };
 			
-			if (right)this.characterSymbolPositions = this.newCharacterPositionsRight(this.characterSymbolPositions);
-			if (down)this.characterSymbolPositions = this.newCharacterPositionsDown(this.characterSymbolPositions);
-			if(up)this.characterSymbolPositions = this.newCharacterPositionsUp(this.characterSymbolPositions);
-			if (left)this.characterSymbolPositions = this.newCharacterPositionsLeft(this.characterSymbolPositions);
+			if (direction == 'D')this.characterSymbolPositions = this.newCharacterPositionsRight(this.characterSymbolPositions);
+			if (direction == 'S')this.characterSymbolPositions = this.newCharacterPositionsDown(this.characterSymbolPositions);
+			if (direction == 'W')this.characterSymbolPositions = this.newCharacterPositionsUp(this.characterSymbolPositions);
+			if (direction == 'A')this.characterSymbolPositions = this.newCharacterPositionsLeft(this.characterSymbolPositions);
 			
 			for (int i = 0; i < this.characterSymbolPositions.length; i++){
-				//System.out.println(this.characterSymbolPositions[i]);
 				this.field[this.characterSymbolPositions[i]] = this.character.getSymbol();
 			}
 			this.field[lastPosition] = this.fieldChar;
